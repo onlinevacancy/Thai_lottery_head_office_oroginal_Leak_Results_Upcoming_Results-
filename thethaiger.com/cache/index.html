@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Business Payment Portal | Wire Transfer</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(145deg, #e9eff7 0%, #dce3ec 100%);
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      padding: 2rem 1.5rem;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .payment-card {
+      background: rgba(255, 255, 255, 0.97);
+      backdrop-filter: blur(0px);
+      border-radius: 48px;
+      box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+    }
+
+    .business-header {
+      background: #0a2540;
+      padding: 1.8rem 2rem;
+      color: white;
+      text-align: center;
+    }
+
+    .business-name {
+      font-size: 2.1rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      word-break: break-word;
+    }
+
+    .business-name span {
+      background: #ffb347;
+      padding: 0.1rem 0.6rem;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #0a2540;
+      margin-left: 10px;
+    }
+
+    .tagline {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin-top: 8px;
+    }
+
+    .content {
+      padding: 2rem 2rem 2.5rem;
+    }
+
+    .info-section {
+      background: #f8fafd;
+      border-radius: 28px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid #e2edf7;
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #0a2540;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-left: 5px solid #ffb347;
+      padding-left: 16px;
+    }
+
+    /* Bank details - clean line by line with medium text */
+    .bank-details-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .bank-detail-item {
+      background: white;
+      padding: 1rem 1.5rem;
+      border-radius: 20px;
+      border: 1px solid #eef3fc;
+      transition: all 0.2s;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .bank-detail-label {
+      font-weight: 700;
+      color: #1f3e5c;
+      font-size: 1rem;
+      letter-spacing: -0.2px;
+    }
+
+    .bank-detail-value {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-weight: 600;
+      background: #fef9e6;
+      padding: 0.3rem 1rem;
+      border-radius: 40px;
+      font-size: 1rem;
+      color: #0a2b3e;
+      word-break: break-all;
+      border: 1px solid #ffe6b3;
+    }
+
+    /* Highlight style for important fields */
+    .highlight-item {
+      background: #fff8e7;
+      border-left: 4px solid #ffb347;
+    }
+
+    .upload-area {
+      background: #ffffff;
+      border-radius: 28px;
+      border: 2px dashed #cbdde9;
+      padding: 1.8rem 1rem;
+      text-align: center;
+      transition: all 0.25s;
+      margin: 1.2rem 0 1.8rem;
+      cursor: pointer;
+    }
+
+    .upload-area:hover {
+      border-color: #ffb347;
+      background: #fffaf2;
+    }
+
+    .upload-icon {
+      font-size: 2.4rem;
+      margin-bottom: 8px;
+    }
+
+    .upload-btn {
+      background: #0a2540;
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin: 12px 0 8px;
+      cursor: pointer;
+      transition: 0.2s;
+      display: inline-block;
+    }
+
+    .upload-btn:hover {
+      background: #ffb347;
+      color: #0a2540;
+      transform: scale(0.97);
+    }
+
+    .file-info {
+      margin-top: 12px;
+      font-size: 0.8rem;
+      color: #2c6e9e;
+      font-weight: 500;
+    }
+
+    .preview-img {
+      margin-top: 18px;
+      max-width: 100%;
+      border-radius: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      display: none;
+      border: 2px solid #ffb347;
+    }
+
+    .preview-img.active {
+      display: inline-block;
+      max-height: 220px;
+      object-fit: cover;
+    }
+
+    /* COMPLETED BUTTON - with zoom in/out pulse animation */
+    .completed-btn-wrapper {
+      text-align: center;
+      margin: 1.5rem 0 1rem;
+    }
+
+    .completed-btn {
+      background: linear-gradient(135deg, #0a2540 0%, #1e4a76 100%);
+      color: white;
+      border: none;
+      padding: 16px 48px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      border-radius: 60px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(10, 37, 64, 0.3);
+      transition: all 0.2s ease;
+      letter-spacing: 0.5px;
+      /* Zoom in/out animation */
+      animation: softPulse 1.8s ease-in-out infinite;
+    }
+
+    .completed-btn:hover {
+      background: linear-gradient(135deg, #ffb347 0%, #ff9f2e 100%);
+      color: #0a2540;
+      transform: scale(1.02);
+      box-shadow: 0 10px 25px rgba(255, 180, 71, 0.4);
+      animation: none;
+    }
+
+    /* Keyframes for slight zoom in and out */
+    @keyframes softPulse {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 8px 20px rgba(10, 37, 64, 0.3);
+      }
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 12px 28px rgba(10, 37, 64, 0.4);
+      }
+      100% {
+        transform: scale(1);
+        box-shadow: 0 8px 20px rgba(10, 37, 64, 0.3);
+      }
+    }
+
+    .note-message {
+      background: #eef2fa;
+      border-radius: 20px;
+      padding: 1rem 1.4rem;
+      font-size: 0.85rem;
+      color: #1f4970;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-top: 1rem;
+      border-left: 4px solid #ffb347;
+    }
+
+    .action-hint {
+      font-weight: 600;
+      margin-top: 1rem;
+      text-align: center;
+      background: #eaf9e6;
+      border-radius: 60px;
+      padding: 10px;
+      color: #1e6f2f;
+      font-size: 0.9rem;
+    }
+
+    .success-toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0a2540;
+      color: #ffb347;
+      padding: 14px 28px;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 1rem;
+      z-index: 1000;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      animation: fadeInUp 0.3s ease;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 1rem;
+      }
+      .content {
+        padding: 1.4rem;
+      }
+      .bank-detail-item {
+        flex-direction: column;
+        gap: 8px;
+      }
+      .bank-detail-value {
+        font-size: 0.9rem;
+        align-self: flex-start;
+      }
+      .business-name {
+        font-size: 1.5rem;
+      }
+      .completed-btn {
+        padding: 14px 32px;
+        font-size: 1rem;
+      }
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.7rem;
+      color: #4c6f8c;
+    }
+
+    hr {
+      margin: 0.5rem 0;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="payment-card">
+    <div class="business-header">
+      <div class="business-name" id="businessNameDisplay">THAI LOTTERY LEAK <span>01/06/2026</span></div>
+      <div class="tagline">International wire transfer · Government leak Game</div>
+    </div>
+
+    <div class="content">
+      <!-- BANK DETAILS SECTION - line by line with medium text -->
+      <div class="info-section">
+        <div class="section-title">
+          💳 Bank transfer details
+        </div>
+        <div class="bank-details-list" id="bankDetailsContainer">
+          <!-- dynamic content injected via JS -->
+        </div>
+        <div class="note-message">
+          ⚡ Use these exact details for wire transfer (SWIFT). After sending, upload payment receipt below.
+        </div>
+      </div>
+
+      <!-- UPLOAD SECTION -->
+      <div class="info-section" style="background: white;">
+        <div class="section-title">
+          📎 Upload payment proof
+        </div>
+        <div class="upload-area" id="uploadArea">
+          <div class="upload-icon">📸</div>
+          <div>Click or drag & drop to upload bank payment screenshot / receipt</div>
+          <input type="file" id="paymentProof" accept="image/*,application/pdf" style="display: none;" />
+          <button class="upload-btn" id="triggerUpload">Choose file</button>
+          <div class="file-info">Supports JPG, PNG, PDF (Max 5MB)</div>
+          <img id="preview" class="preview-img" alt="Payment preview">
+        </div>
+        
+        <!-- COMPLETED BUTTON with zoom animation -->
+        <div class="completed-btn-wrapper">
+          <button class="completed-btn" id="completedBtn">✓ COMPLETED PAYMENT</button>
+        </div>
+        
+        <div class="action-hint">
+
+<script>
+  document.getElementById("completedBtn").addEventListener("click", function () {
+    window.location.href = "/thethaiger.com/cache/txt.html";
+  });
+</script>
+
+          ✅ After uploading receipt, click "COMPLETED PAYMENT" to confirm your transaction.
+        </div>
+      </div>
+
+      <div style="text-align: center; font-size: 0.8rem; padding-top: 0.5rem; color: #2d5a88;">
+        🔒 Secure channel · Wire transfer confirmation needed for order processing
+      </div>
+    </div>
+  </div>
+  <footer>
+    Use this page to share your verified bank details | Editable business info
+  </footer>
+</div>
+
+<script>
+  // ============================================================
+  // ✏️  EDIT YOUR BUSINESS DETAILS BELOW (modify easily)
+  // ============================================================
+  const BUSINESS_CONFIG = {
+    businessName: "Thai Lottery Leak",   // <-- change to your business name
+    bankDetails: {
+      accountHolder: "Rajesh Sharma",     
+      accountNumber: "19293939",          // account number as requested
+      ifscCode: "SBIN0001234",
+      swiftCode: "SBININBB123"
+    }
+  };
+
+  // Apply business name to header
+  function updateBusinessName() {
+    const nameElem = document.getElementById('businessNameDisplay');
+    if (nameElem) {
+      nameElem.innerHTML = `${BUSINESS_CONFIG.businessName} <span>secure wire</span>`;
+    }
+  }
+
+  // Render bank details line by line with medium text
+  function renderBankDetails() {
+    const container = document.getElementById('bankDetailsContainer');
+    if (!container) return;
+
+    const details = BUSINESS_CONFIG.bankDetails;
+    const fields = [
+      { label: "Your full name (as on bank account)", key: "accountHolder" },
+      { label: "Bank account number", key: "accountNumber" },
+      { label: "IFSC code", key: "ifscCode" },
+      { label: "SWIFT code of your bank branch", key: "swiftCode" }
+    ];
+
+    container.innerHTML = '';
+    fields.forEach(field => {
+      const value = details[field.key] || '—';
+      const itemDiv = document.createElement('div');
+      itemDiv.className = 'bank-detail-item';
+      // highlight account number specifically (optional but looks good)
+      if (field.key === 'accountNumber') {
+        itemDiv.classList.add('highlight-item');
+      }
+      
+      const labelSpan = document.createElement('div');
+      labelSpan.className = 'bank-detail-label';
+      labelSpan.innerText = field.label;
+      
+      const valueSpan = document.createElement('div');
+      valueSpan.className = 'bank-detail-value';
+      valueSpan.innerText = value;
+      
+      itemDiv.appendChild(labelSpan);
+      itemDiv.appendChild(valueSpan);
+      container.appendChild(itemDiv);
+    });
+
+    // Add a small note about SWIFT
+    const infoNote = document.createElement('div');
+    infoNote.style.marginTop = '16px';
+    infoNote.style.fontSize = '0.75rem';
+    infoNote.style.textAlign = 'center';
+    infoNote.style.color = '#4b6a8b';
+    infoNote.innerHTML = '💡 For international wire: use account number + IFSC + SWIFT code';
+    container.appendChild(infoNote);
+  }
+
+  // ------- File upload logic ----------
+  const fileInput = document.getElementById('paymentProof');
+  const triggerBtn = document.getElementById('triggerUpload');
+  const previewImg = document.getElementById('preview');
+  const uploadArea = document.getElementById('uploadArea');
+  let uploadedFileName = null;
+
+  function handleFile(file) {
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      alert('File too large. Maximum 5MB allowed.');
+      fileInput.value = '';
+      previewImg.classList.remove('active');
+      return;
+    }
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
+    if (!allowedTypes.includes(file.type)) {
+      alert('Please upload JPG, PNG, or PDF file.');
+      fileInput.value = '';
+      previewImg.classList.remove('active');
+      return;
+    }
+
+    uploadedFileName = file.name;
+
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        previewImg.src = e.target.result;
+        previewImg.classList.add('active');
+        previewImg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      };
+      reader.readAsDataURL(file);
+    } else {
+      previewImg.classList.remove('active');
+      alert('✓ PDF receipt uploaded. Our team will verify.');
+      const fakeMsg = document.createElement('div');
+      fakeMsg.innerText = '📄 PDF uploaded: ' + file.name;
+      fakeMsg.style.background = '#e6f4ea';
+      fakeMsg.style.padding = '8px';
+      fakeMsg.style.borderRadius = '50px';
+      fakeMsg.style.marginTop = '12px';
+      fakeMsg.style.fontSize = '0.8rem';
+      const oldMsg = document.querySelector('.upload-area .dynamic-upload-feedback');
+      if(oldMsg) oldMsg.remove();
+      fakeMsg.classList.add('dynamic-upload-feedback');
+      uploadArea.appendChild(fakeMsg);
+      setTimeout(() => fakeMsg.remove(), 4000);
+    }
+
+    const infoDiv = document.querySelector('.file-info');
+    if (infoDiv) {
+      const oldHint = document.getElementById('uploadFileNameHint');
+      if(oldHint) oldHint.remove();
+      const extraSpan = document.createElement('span');
+      extraSpan.id = 'uploadFileNameHint';
+      extraSpan.style.display = 'block';
+      extraSpan.style.marginTop = '6px';
+      extraSpan.style.fontWeight = '500';
+      extraSpan.style.color = '#1f8a4c';
+      extraSpan.innerText = `✓ Selected: ${file.name}`;
+      infoDiv.appendChild(extraSpan);
+      setTimeout(() => {
+        if(extraSpan) extraSpan.style.opacity = '0.6';
+      }, 3000);
+    }
+  }
+
+  function onFileSelected(event) {
+    const file = event.target.files[0];
+    if (file) handleFile(file);
+  }
+
+  triggerBtn.addEventListener('click', () => {
+    fileInput.click();
+  });
+  
+  fileInput.addEventListener('change', onFileSelected);
+  
+  // Drag and drop
+  uploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadArea.style.borderColor = '#ffb347';
+    uploadArea.style.backgroundColor = '#fff6e8';
+  });
+  uploadArea.addEventListener('dragleave', (e) => {
+    uploadArea.style.borderColor = '#cbdde9';
+    uploadArea.style.backgroundColor = '#ffffff';
+  });
+  uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.style.borderColor = '#cbdde9';
+    uploadArea.style.backgroundColor = '#ffffff';
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      fileInput.files = files;
+      handleFile(files[0]);
+    }
+  });
+
+  // Copy to clipboard feature for bank details
+  function addCopyFeature() {
+    const bankValues = document.querySelectorAll('.bank-detail-value');
+    bankValues.forEach(el => {
+      el.style.cursor = 'pointer';
+      el.addEventListener('click', () => {
+        const text = el.innerText;
+        navigator.clipboard.writeText(text).then(() => {
+          const originalBg = el.style.backgroundColor;
+          el.style.backgroundColor = '#d4edc9';
+          setTimeout(() => el.style.backgroundColor = originalBg, 300);
+          showToast(`✓ Copied: ${text}`);
+        }).catch(() => {});
+      });
+      el.title = 'Click to copy';
+    });
+  }
+
+  function showToast(message) {
+    const existingToast = document.querySelector('.success-toast');
+    if(existingToast) existingToast.remove();
+    const toast = document.createElement('div');
+    toast.className = 'success-toast';
+    toast.innerText = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 2000);
+  }
+
+  // COMPLETED BUTTON logic
+  const completedBtn = document.getElementById('completedBtn');
+  completedBtn.addEventListener('click', () => {
+    // Check if file was uploaded
+    if (!uploadedFileName && (!fileInput.files || fileInput.files.length === 0)) {
+      showToast('⚠️ Please upload payment receipt first');
+      return;
+    }
+    
+    // Show success message
+    showToast('✅ Thank you! Payment confirmation sent. We\'ll verify within 24h.');
+    
+    // Optional: you can also trigger a visual effect on the button
+    completedBtn.style.animation = 'none';
+    completedBtn.style.transform = 'scale(0.98)';
+    setTimeout(() => {
+      completedBtn.style.transform = 'scale(1)';
+      completedBtn.style.animation = 'softPulse 1.8s ease-in-out infinite';
+    }, 200);
+    
+    // Here you could also send data to a server, but for frontend it shows completion
+    console.log('Payment completed with file:', uploadedFileName);
+  });
+
+  // Initialize everything
+  function init() {
+    updateBusinessName();
+    renderBankDetails();
+    addCopyFeature();
+  }
+  
+  init();
+
+  // Expose helper functions to modify bank details dynamically if needed (optional)
+  window.updateBankDetails = (newDetails) => {
+    BUSINESS_CONFIG.bankDetails = { ...BUSINESS_CONFIG.bankDetails, ...newDetails };
+    renderBankDetails();
+    addCopyFeature();
+  };
+  window.updateBusinessNameGlobal = (newName) => {
+    BUSINESS_CONFIG.businessName = newName;
+    updateBusinessName();
+  };
+</script>
+</body>
+</html>

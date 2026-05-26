@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Company</title>
+
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f6f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1000px;
+      text-align: center;
+    }
+
+    /* Company Heading */
+    .company-name {
+      font-size: 40px;
+      margin-bottom: 50px;
+      color: #222;
+    }
+
+    /* Box Section */
+    .boxes {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .box-wrapper {
+      width: 250px;
+    }
+
+    .box-title {
+      font-size: 22px;
+      margin-bottom: 12px;
+      color: #444;
+    }
+
+    .box {
+      background: white;
+      border-radius: 12px;
+      padding: 40px 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      font-size: 36px;
+      font-weight: bold;
+      color: #111;
+      transition: 0.3s;
+    }
+
+    .box:hover {
+      transform: translateY(-5px);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .company-name {
+        font-size: 32px;
+      }
+
+      .box-wrapper {
+        width: 100%;
+        max-width: 300px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- Company Name -->
+    <h1 class="company-name">Thai Leak Set 01/06/2026</h1>
+
+    <!-- Boxes -->
+    <div class="boxes">
+
+      <!-- Box 1 -->
+      <div class="box-wrapper">
+        <h2 class="box-title">3Up Set</h2>
+        <div class="box">125</div>
+      </div>
+
+      <!-- Box 2 -->
+      <div class="box-wrapper">
+        <h2 class="box-title">2 Down</h2>
+        <div class="box">450</div>
+      </div>
+
+      <!-- Box 3 -->
+      <div class="box-wrapper">
+        <h2 class="box-title">Box 3</h2>
+        <div class="box">890</div>
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+</html>
